@@ -5,37 +5,23 @@ body {
     text-align: center;
     margin: 0;
     padding: 0;
-    height: 100vh;
 }
 
 h1, h2 {
     margin: 20px;
 }
 
-.oculto {
-    display: none;
-}
-
-#bienvenida {
-    display: block;
-    margin-top: 50px;
-}
-
-#configuracion, #resultados {
-    display: none;
-    margin: auto;
-    background-color: rgba(0, 0, 0, 0.8);
+#bienvenida, #configuracion, #resultados {
+    margin: 30px auto;
     padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
     border-radius: 10px;
-    width: 90%;
     max-width: 900px;
-    color: white;
-    margin-top: 50px;
 }
 
 input {
     padding: 10px;
-    margin: 10px;
+    margin: 5px;
     background-color: #333;
     border: none;
     color: white;
@@ -46,10 +32,9 @@ button {
     color: white;
     border: none;
     padding: 10px 20px;
-    text-align: center;
     font-size: 16px;
     cursor: pointer;
-    margin-top: 20px;
+    margin: 10px;
 }
 
 button:hover {
@@ -58,7 +43,7 @@ button:hover {
 
 table {
     width: 100%;
-    margin-top: 20px;
+    margin: 10px 0;
     border-collapse: collapse;
 }
 
@@ -67,8 +52,6 @@ th, td {
     text-align: center;
 }
 
-input[type="text"], input[type="time"] {
-    padding: 5px;
-    margin: 5px;
-    width: 100px;
+input[type="time"], input[type="number"], input[type="text"] {
+    width: 90px;
 }
