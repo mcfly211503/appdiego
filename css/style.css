@@ -1,0 +1,74 @@
+body {
+    background-color: black;
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+h1, h2 {
+    margin: 20px;
+}
+
+.oculto {
+    display: none;
+}
+
+#bienvenida {
+    display: block;
+    margin-top: 50px;
+}
+
+#configuracion, #resultados {
+    display: none;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 900px;
+    color: white;
+    margin-top: 50px;
+}
+
+input {
+    padding: 10px;
+    margin: 10px;
+    background-color: #333;
+    border: none;
+    color: white;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+input[type="text"], input[type="time"] {
+    padding: 5px;
+    margin: 5px;
+    width: 100px;
+}
