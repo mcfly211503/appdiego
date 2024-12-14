@@ -36,10 +36,10 @@ function generarFormularioResultados(categorias, numCarreras) {
     Object.keys(categoriasNombres).forEach((categoria) => {
         if (categoriasNombres[categoria] > 0) {
             // Título de la categoría
-            tabla.innerHTML += `<h3>Categoria ${categoria}</h3>`;
+            tabla.innerHTML += `<h3>Resultados - Categoría ${categoria}</h3>`;
 
             // Encabezados de las carreras + columna del número de corredor
-            let encabezados = "<tr><th style='width: 100px; font-size: 1.2em;'>Número Corredor</th><th>Nombre</th>";
+            let encabezados = "<tr><th>Número Corredor</th><th>Nombre</th>";
             for (let i = 1; i <= numCarreras; i++) {
                 encabezados += `<th>Carrera ${i} (Inicio y Fin)</th>`;
             }
@@ -49,7 +49,7 @@ function generarFormularioResultados(categorias, numCarreras) {
             // Generar filas para los jugadores de esta categoría
             for (let i = 1; i <= categoriasNombres[categoria]; i++) {
                 let fila = `<tr>
-                    <td><input type="number" placeholder="Número" id="numero${categoria}${i}" min="1" required style="font-size: 1.2em; width: 80px;"></td>
+                    <td><input type="number" placeholder="Número" id="numero${categoria}${i}" min="1" required></td>
                     <td><input type="text" placeholder="Nombre" id="nombre${categoria}${i}"></td>`;
                 for (let j = 1; j <= numCarreras; j++) {
                     fila += `<td>
@@ -66,33 +66,29 @@ function generarFormularioResultados(categorias, numCarreras) {
     document.getElementById("resultados").style.display = "block";
 }
 
-// Función para calcular los resultados
 document.getElementById("btnCalcularResultados").addEventListener("click", function () {
     const categorias = ["NX", "PX", "EX"];
-    let resultados = "";
+    let resultadosHTML = ""; // Variable para construir el HTML de resultados
 
     categorias.forEach((categoria) => {
-        resultados += `<h3>Resultados - Categoría ${categoria}</h3>`;
-        const tabla = document.getElementById("tablaResultados");
-        const filas = Array.from(tabla.getElementsByTagName("tr")).filter((tr) =>
-            tr.innerHTML.includes(`nombre${categoria}`)
-        );
+        let corredores = []; // Aquí almacenaremos los corredores con sus tiempos
+        let categoriaHTML = `<h3>Resultados - Categoría ${categoria}</h3>`;
 
-        filas.forEach((fila, index) => {
-            const nombre = document.getElementById(`nombre${categoria}${index + 1}`).value || `Jugador ${index + 1}`;
-            const numero = document.getElementById(`numero${categoria}${index + 1}`).value || "N/A";
-            const celdas = fila.getElementsByTagName("td");
-            let tiempoTotal = 0;
-            let cuentaCarreras = 0;
+        for (let i = 1; document.getElementById(`nombre${categoria}${i}`); i++) {
+            const nombre = document.getElementById(`nombre${categoria}${i}`).value || `Jugador ${i}`;
+            const numero = document.getElementById(`numero${categoria}${i}`).value || "N/A";
+            let tiempoTotal = 0, cuentaCarreras = 0;
 
-            for (let j = 1; j < celdas.length; j++) {
-                const inicio = document.getElementById(`inicio${categoria}${index + 1}_${j}`).value;
-                const fin = document.getElementById(`fin${categoria}${index + 1}_${j}`).value;
+            // Calcular tiempo total
+            for (let j = 1; document.getElementById(`inicio${categoria}${i}_${j}`); j++) {
+                const inicio = document.getElementById(`inicio${categoria}${i}_${j}`).value;
+                const fin = document.getElementById(`fin${categoria}${i}_${j}`).value;
 
                 if (inicio && fin) {
                     const tiempoInicio = new Date(`1970-01-01T${inicio}Z`);
                     const tiempoFin = new Date(`1970-01-01T${fin}Z`);
                     const diferencia = (tiempoFin - tiempoInicio) / 1000;
+
                     if (diferencia >= 0) {
                         tiempoTotal += diferencia;
                         cuentaCarreras++;
@@ -100,14 +96,33 @@ document.getElementById("btnCalcularResultados").addEventListener("click", funct
                 }
             }
 
-            if (cuentaCarreras > 0) {
-                const tiempoPromedio = (tiempoTotal / cuentaCarreras).toFixed(2);
-                resultados += `<p>Corredor ${numero} - ${nombre}: Tiempo Promedio: ${tiempoPromedio} segundos</p>`;
-            } else {
-                resultados += `<p>Corredor ${numero} - ${nombre}: No tiene tiempos válidos</p>`;
-            }
+            const promedio = cuentaCarreras > 0 ? (tiempoTotal / cuentaCarreras) : null;
+
+            corredores.push({
+                numero,
+                nombre,
+                promedio: promedio !== null ? promedio.toFixed(2) : "Sin datos"
+            });
+        }
+
+        // Ordenar corredores por tiempo promedio (de menor a mayor)
+        corredores.sort((a, b) => {
+            if (a.promedio === "Sin datos") return 1;
+            if (b.promedio === "Sin datos") return -1;
+            return parseFloat(a.promedio) - parseFloat(b.promedio);
         });
+
+        // Construir HTML de resultados ordenados
+        if (corredores.length > 0) {
+            corredores.forEach((corredor) => {
+                categoriaHTML += `<p>Corredor ${corredor.numero} - ${corredor.nombre}: Tiempo Promedio: ${corredor.promedio} segundos</p>`;
+            });
+        } else {
+            categoriaHTML += `<p>No hay datos ingresados en esta categoría.</p>`;
+        }
+
+        resultadosHTML += categoriaHTML;
     });
 
-    document.getElementById("resultadosCalculados").innerHTML = resultados;
+    document.getElementById("resultadosCalculados").innerHTML = resultadosHTML;
 });
