@@ -12,10 +12,6 @@ h1, h2 {
     margin: 20px;
 }
 
-.oculto {
-    display: none;
-}
-
 #bienvenida {
     display: block;
     margin-top: 50px;
